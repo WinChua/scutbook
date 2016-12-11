@@ -14,8 +14,6 @@ parser.add_argument("-t", "--today", action="store_true",
                     dest='today', help=u'设置查询日期为当天')
 parser.add_argument("--config", dest='config_file',
                     help=u'指定用户配置文件', default=join(basename, "config.json"))
-#parser.add_argument("-f", "--flush", dest='flush',
-                    #help='flush cookies', action='store_true')
 parser.add_argument("-l", "--length", dest='length',
                     help=u'如果today没有被设置, 指定查询天数, 默认是10天', type=int, default=10)
 parser.add_argument("-p", "--place", choices = range(4), default = 0, 

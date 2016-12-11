@@ -3,10 +3,23 @@
 import requests
 import urllib
 import sys
-from bs4 import BeautifulSoup as BS
 import re
-from test import setting
+from bs4 import BeautifulSoup as BS
+from setting import setting
 
+time_map = {
+    "8":"08:00--09:00",
+   "9":"09:00--10:00",
+    "10":"10:00--11:00",
+    "11":"11:00--12:00",
+    "12":"12:00--13:00",
+    "13":"13:00--14:00",
+    "14":"14:00--15:00",
+    "15":"15:00--16:00",
+    "16":"16:00--18:00",
+    "18":"18:00--20:00",
+    "20":"20:00--22:00"
+}
 
 def login(user):
     login_url = 'http://116.57.72.197:9099/sports/users/login'
@@ -41,23 +54,7 @@ def query(login_res, date, place):
         tds = times.findAll("td")
         if tds:
             results.append((id, num, map(lambda x: x.text, tds)))
-##            print id, num
-##            for td in tds:
-##                print td.text
     return results, num_ids
-time_map = {
-    "8":"08:00--09:00",
-   "9":"09:00--10:00",
-    "10":"10:00--11:00",
-    "11":"11:00--12:00",
-    "12":"12:00--13:00",
-    "13":"13:00--14:00",
-    "14":"14:00--15:00",
-    "15":"15:00--16:00",
-    "16":"16:00--18:00",
-    "18":"18:00--20:00",
-    "20":"20:00--22:00"
-}
     
 def book(login_res, place, datetime, ydtime, num):
     result, num_ids = query(login_res, datetime, place)
@@ -88,20 +85,19 @@ def _book(login_res, floor_id, datetime, ydtime, place):
     book = requests.get(book_url, cookies = login_res.cookies)
     bs = BS(book.content)
     code = bs.find("input", attrs = {"name":"code"})['value']
-#    update_url = "http://116.57.72.197:9099/sports/reservezd/update?datetime=2016-12-17&ydtime=0,08:00--09:00"
     update_url = "http://116.57.72.197:9099/sports/reservezd/update"
     update_get_param = {"datetime": datetime, "ydtime": ydtime}
     update_url = update_url + "?" + urllib.urlencode(update_get_param)
     update_post_param = {"floor.id": floor_id,
-                         "sno":"201620108279",
+                         "sno":setting.user["loginName"],
                          "realSno":"",
                          "flag":"0",
                          "computeFeeMode.id":"",
                          "code":"",
                          "account":"103062",
                          "opentime": ydtime,
-                         "lxr": "cy",
-                         "lxdh": "13660270454",
+                         "lxr": setting.user["lxr"],
+                         "lxdh": setting.user["lxdh"],
                          "memo":""
                          }
     update_post_param['code'] = code
