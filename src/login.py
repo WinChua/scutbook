@@ -1,6 +1,7 @@
 #! /usr/bin/python
 # -*- coding: utf8 -*-
 import requests
+import json
 import urllib
 import sys
 import re
@@ -35,6 +36,10 @@ def login(user):
     login_url = 'http://116.57.72.197:9099/sports/users/login'
     user['loginMode'] = "1"
     login_res = requests.post(login_url, data=user)
+    reason = json.loads(login_res.content)
+    if reason['success'] == False:
+        print reason['info']
+        sys.exit(1)
     return login_res
 
 

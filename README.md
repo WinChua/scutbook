@@ -5,8 +5,8 @@
 
     {
         "loginMode": "1",
-        "loginName": "201674266460",
-        "password": "1314520"
+        "loginName": "20167042606460", // 登录名称
+        "password": "1314520"        // 登录密码
     }
 
 
